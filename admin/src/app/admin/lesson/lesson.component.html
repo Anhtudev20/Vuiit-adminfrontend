@@ -1,0 +1,140 @@
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Khóa học</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+     
+        <ng-template #modalLesson let-modal class="modal-xl">
+            <div class="modal-header modal-xl">
+                <h4 class="modal-title" id="modal-basic-title">Lesson</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name" class="form-label">Tên:</label>
+                        <input type="text" id="name" name="name" class="form-control" [(ngModel)]="currentSelectedLesson.name" [ngModelOptions]="{standalone: true}">
+                    </div>               
+                    <div class="form-group">
+                        <label for="importFile" class="form-label">Slide bài giảng:</label>
+                        <input type="file" id="importFile" name="importFile" class="form-control" (change)="onFileSelected($event)" >
+                    </div>
+                    <div class="form-group">
+                        <ngx-doc-viewer
+                        [url]="sanitizedImportFile"
+                        viewer="office"
+                        style="width:100%;height:50vh;"
+                      ></ngx-doc-viewer>
+                                           </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="Refresh()" *ngIf="typeModal=='create'">Làm mới</button>
+                <button type="button" class="btn btn-outline-dark" (click)="createToServer()" *ngIf="typeModal=='create'">Tạo</button>
+                <button type="button" class="btn btn-outline-dark" (click)="updateToServer()" *ngIf="typeModal=='edit'">Sửa</button>
+                <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
+            </div>
+        </ng-template>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="d-lg-flex align-items-center mb-4 gap-3">
+                    <div class="position-relative d-flex">
+                        <button class="extend-search-btn" (click)="changeExtendSearchDivVisible()">
+                            <i class="bx bx-down-arrow extend-search-icon"></i>
+                        </button>
+
+                        <div style="position: relative;">
+                            <input type="text" class="form-control ps-4 main-search-box" placeholder="Nhập tên khóa học..." [(ngModel)]="searchObject.name">
+                            <div class="fancy-div" [ngClass]="{'show': isSearchDivVisible}">
+                            </div>
+                        </div>
+
+                        <button class="btn search-btn-custom" (click)="search()">
+                            <i class="bx bx-search"></i>
+                        </button>
+                    </div>
+
+                    <button class="btn btn-primary radius-30 mt-2 mt-lg-0" (click)="resetSearching()">
+                        <i class="bx bx-reset"></i>Reset tìm kiếm
+                    </button>
+
+                    <div class="ms-auto">
+                        <a href="javascript:;" class="btn btn-primary radius-30 mt-2 mt-lg-0" (click)="openLessonModal('create')">
+                            <i class="bx bxs-plus-square"></i>Tạo khóa học
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-responsive" id="#">
+                    <table class="table mb-0 table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>STT</th>
+                                <th><a href="#" rel="noopener noreferrer" role="button" class="blank-link" >
+                                    <span class="col">Ảnh </span>
+                                    </a>
+                                </th>
+                                <th><a href="#" rel="noopener noreferrer" role="button" class="blank-link" >
+                                    <span class="col">Tên </span>
+                                    </a>
+                                </th>
+                                
+
+                             
+                             
+                                <th><span >Hành động</span></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="totalData>0">
+                            <tr *ngFor="let i = index;let item of data | paginate
+                            : {
+                                itemsPerPage:page.pageSize,
+                                currentPage: page.currentPage,
+                                totalItems: totalData
+                              }">
+                                <td>{{page.currentPage  +i}}</td>
+
+                                <td>{{item.name}}</td>
+                             
+                                <td>
+                                    <div class="d-flex order-actions">
+                                        <a href="javascript:;" class="ms-2" (click)="openLessonModal('edit',item)" ><i class='bx bxs-edit'></i></a>
+                                        <a href="javascript:;" class="ms-2" (click)="delete(item.id)"><i class='bx bxs-trash'></i></a>
+
+                                    </div>
+                                </td>
+                            </tr>
+                         
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-group d-flex">
+                    <p style="margin-top: 25px;width: 150px;">Tổng cộng: {{totalData}} bản ghi</p>
+                    <div class="input-group" style="justify-content: right; margin-top: 10px;">
+                        <select class="form-select" aria-label="Default select example" style="max-height: 45px;max-width: 20%;" [(ngModel)]="page.pageSize" (change)="fetchData()">
+                            <option value="10">10 bản ghi mỗi trang</option>
+                            <option value="20" selected>20 bản ghi mỗi trang</option>
+                            <option value="30">30 bản ghi mỗi trang</option>
+                            <option value="50">50 bản ghi mỗi trang</option>
+                            <option value="100">100 bản ghi mỗi trang</option>
+                        </select>
+                        <pagination-controls style="padding-top: 10px;" class="pagi" (pageChange)="renderPage($event)"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

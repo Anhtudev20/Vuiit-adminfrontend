@@ -370,32 +370,19 @@
             </a>
             
             <li class="nav-item dropdown">
-                <a href="javascript:;" class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown">
+                <a [routerLink]="['/adminaccount']"  [queryParams]="{debug: true}" fragment="education" class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown">
                 <div class="parent-icon"><i class='bx bx-cart'></i>
                 </div>
-                <div class="menu-title">Tin tức</div>
+                <div class="menu-title">Tài khoản</div>
               </a>
-              <ul class="dropdown-menu">
-                <li> <a class="dropdown-item" href="/blogcategory"><i class="bx bx-right-arrow-alt"></i>Phân loại tin tức</a>
-                </li>
-                <li> <a class="dropdown-item" href="/blog"><i class="bx bx-right-arrow-alt"></i>Danh sách tin tức</a>
-                </li>   
-                           
-                </ul>
-              </li>
-              
+         
              <li class="nav-item dropdown">
-              <a href="javascript:;" class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown">
+              <a [routerLink]="['/admincourse']" class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown">
                 <div class="parent-icon"><i class="bx bx-category"></i>
                 </div>
-                <div class="menu-title">Dịch vụ</div>
+                <div class="menu-title">Khóa học</div>
              </a>
-              <ul class="dropdown-menu">
-                <li> <a class="dropdown-item" href="/petservice"><i class="bx bx-right-arrow-alt"></i>Phân loại dịch vụ</a>
-                </li>
-                <li> <a class="dropdown-item" href="/serviceoption"><i class="bx bx-right-arrow-alt"></i>Tùy chọn dịch vụ</a>
-                </li>
-              </ul>
+             
             </li>
             <li class="nav-item">
                 <a  class="nav-link" href="widgets.html" href="/employee">
